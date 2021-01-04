@@ -3,6 +3,16 @@ audile
 
 A mobile-friendly audio player for use with long-form audio. [See it in action.](https://www.chrispattonmusic.com/nissas-flute/)
 
+Features
+--------
+
+* Supports both a single audio track or multiple tracks in order (e.g. a playlist)
+* Saves last-played track and playhead location and restores them when returning to that page
+* Features a simple mobile-first design with touch-friendly controls ([see example](https://www.chrispattonmusic.com/nissas-flute/ ))
+* Includes controls for previous and next track and for skipping backwards or forwards 15 seconds
+* Shows the title of the current playing track in the player
+* Weighs in at less than 20KB uncompressed with no dependencies
+
 Usage
 -----
 Include the library anywhere in your page HTML (insert desired version number in place of `1.0.0`):
