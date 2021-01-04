@@ -40,7 +40,7 @@ Add the audio files you want to be playable by the player inside a `.audile` con
     <audio src="https://archive.org/download/Ricky_Gervais-Podcasts/02%20Episode%20Twelve.mp3" title="Episode Twelve"></audio>
 </div>
 ```
-You can make the player fixed to the bottom or top of the page via the `data-adl-attach` attribute:
+You can fix the player to the bottom or top of the viewport via the `data-adl-attach` attribute:
 ```html
 <!-- Attach to the top of the viewport: -->
 <div class="audile" data-adl-attach="top">…</div>
