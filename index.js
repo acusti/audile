@@ -1,3 +1,5 @@
+// TODO convert skip-back and skip-forward button styles to only include the arrow and use ::before {content:"15"} for the number
+// TODO derive skip-back and skip-forward values from data attributes (data-adl-skip-back and data-adl-skip-forward?)
 // TODO add timestamp-based poster images
 // TODO use CSS variables for colors, dimensions, 15 seconds number (via :before or :after + content: --var(...)), etc.
 (function(d) {
