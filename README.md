@@ -15,10 +15,10 @@ Features
 
 Usage
 -----
-Include the library anywhere in your page HTML (insert desired version number in place of `1.0.0`):
+Include the library anywhere in your page HTML (insert desired version number in place of `1.0.1`):
 
 ```html
-<script src="https://unpkg.com/audile@1.0.0/index.js"></script>
+<script async src="https://unpkg.com/audile@1.0.1/index.js"></script>
 ```
 
 Add the audio files you want to be playable by the player inside a `.audile` containing element:
