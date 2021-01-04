@@ -1,6 +1,6 @@
 // TODO add timestamp-based poster images
 // TODO use CSS variables for colors, dimensions, 15 seconds number (via :before or :after + content: --var(...)), etc.
-document.addEventListener('DOMContentLoaded', function() {
+(function(d) {
     var UI_FONT_STACK =
         'font-family:-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Oxygen-Sans,Ubuntu,Cantarell,sans-serif';
     var CIRCLE_ARROW_PATH =
@@ -90,257 +90,265 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
     var savedTrackSrc = localStorage.getItem(KEY_TRACK_SRC);
     var savedProgress = localStorage.getItem(KEY_TRACK_PROGRESS);
 
-    document.querySelectorAll('.audile').forEach(function(wrapper) {
-        var tracks = wrapper.querySelectorAll('audio');
-        if (!tracks.length) return;
-
-        wrapper.classList.add('loading');
-
-        var topRow = document.createElement('div');
-        topRow.className = 'audile-top-row';
-        var controls = document.createElement('div');
-        controls.className = 'audile-controls';
-        var buttonTrackPrevious = document.createElement('button');
-        buttonTrackPrevious.className = 'audile-button-track-previous';
-        buttonTrackPrevious.textContent = 'Previous track';
-        var buttonTrackNext = document.createElement('button');
-        buttonTrackNext.className = 'audile-button-track-next';
-        buttonTrackNext.textContent = 'Next track';
-        var currentTitle = document.createElement('span');
-        currentTitle.className = 'audile-current-title';
-        currentTitle.innerText = 'Loading…';
-        var buttonSkipBack = document.createElement('button');
-        buttonSkipBack.className = 'audile-button-skip-back';
-        buttonSkipBack.textContent = 'Fast forward 15 seconds';
-        var buttonSkipForward = document.createElement('button');
-        buttonSkipForward.className = 'audile-button-skip-forward';
-        buttonSkipForward.textContent = 'Rewind 15 seconds';
-        var buttonPlayPause = document.createElement('button');
-        buttonPlayPause.className = 'audile-button-play-pause';
-        var progressBar = document.createElement('progress');
-        progressBar.className = 'audile-progress-bar';
-        progressBar.min = '0';
-        progressBar.max = '100';
-        // progressBar.value = '0';
-        var scrubberBar = document.createElement('input');
-        scrubberBar.className = 'audile-scrubber-bar';
-        scrubberBar.type = 'range';
-        scrubberBar.min = '0';
-        scrubberBar.max = '100';
-        // scrubberBar.value = '0';
-        var currentTime = document.createElement('span');
-        currentTime.className = 'audile-current-time';
-        currentTime.textContent = '0:00';
-        var duration = document.createElement('span');
-        duration.className = 'audile-duration';
-        duration.textContent = '--:--';
-
-        topRow.appendChild(currentTitle);
-        topRow.appendChild(progressBar);
-        topRow.appendChild(scrubberBar);
-        topRow.appendChild(currentTime);
-        topRow.appendChild(duration);
-        // topRow.appendChild(timeDisplay);
-        if (tracks.length > 1) {
-            controls.appendChild(buttonTrackPrevious);
-        }
-        controls.appendChild(buttonSkipBack);
-        controls.appendChild(buttonPlayPause);
-        controls.appendChild(buttonSkipForward);
-        if (tracks.length > 1) {
-            controls.appendChild(buttonTrackNext);
-        }
-
-        wrapper.appendChild(topRow);
-        wrapper.appendChild(controls);
-
-        var styleElement = document.createElement('style');
-        styleElement.innerHTML = STYLES;
-        document.head.appendChild(styleElement);
-
-        var isPlaying = false;
-        var currentIndex = 0;
-        var initialIndex = 0;
-        var trackStateBySrc = {};
-        if (savedTrackSrc) {
-            for (var index = 0; index < tracks.length; index++) {
-                if (tracks[index].src !== savedTrackSrc) continue;
-                initialIndex = index;
-                break;
-            }
-        }
-
-        if (!tracks[initialIndex]) return;
-
-        function initializePlayer() {
-            wrapper.classList.remove('loading');
-            updateTrackIndex(initialIndex);
-            if (savedProgress) {
-                updateTrackProgress(tracks[initialIndex], savedProgress);
-            }
-            tracks[initialIndex].removeEventListener('canplay', initializePlayer);
-        }
-
-        tracks[initialIndex].addEventListener('canplay', initializePlayer);
-        tracks[initialIndex].load();
-
-        function updateTrackProgress(track, time) {
-            if (Math.floor(track.currentTime) !== Math.floor(time)) {
-                track.currentTime = time;
-            }
-            // Only update UI controls if this is the current track and we know its duration
-            if (tracks[currentIndex] !== track || Number.isNaN(track.duration)) return;
-
-            var progressValue = parseFloat(((time / track.duration) * 100).toFixed(6));
-            progressBar.value = progressValue;
-            scrubberBar.value = progressValue;
-            currentTime.textContent = formatTimestamp(time);
-            duration.textContent = '–' + formatTimestamp(track.duration - track.currentTime);
-        }
-
-        function updateTrackIndex(nextIndex) {
-            if (!tracks.length) return;
-            // Keep it wihin the bounds of the available audio tracks
-            nextIndex = Math.max(Math.min(nextIndex, tracks.length - 1), 0);
-
-            tracks.forEach(function(track, index) {
-                track.pause();
-                updateTrackProgress(track, 0);
-            });
-
-            currentIndex = nextIndex;
-            buttonTrackPrevious.disabled = currentIndex === 0;
-            buttonTrackNext.disabled = currentIndex === tracks.length - 1;
-
-            var nextTrack = tracks[currentIndex];
-            currentTitle.innerText = nextTrack.title || nextTrack.src;
-            duration.textContent = Number.isNaN(nextTrack.duration)
-                ? '--:--'
-                : '–' + formatTimestamp(nextTrack.duration);
-            if (isPlaying) {
-                nextTrack.play();
-            }
-        }
-
-        buttonPlayPause.addEventListener('click', function() {
+    function attachPlayers() {
+        d.querySelectorAll('.audile').forEach(function(wrapper) {
+            var tracks = wrapper.querySelectorAll('audio');
             if (!tracks.length) return;
 
-            if (!tracks[currentIndex]) {
-                currentIndex = tracks.length - 1;
+            wrapper.classList.add('loading');
+
+            var topRow = d.createElement('div');
+            topRow.className = 'audile-top-row';
+            var controls = d.createElement('div');
+            controls.className = 'audile-controls';
+            var buttonTrackPrevious = d.createElement('button');
+            buttonTrackPrevious.className = 'audile-button-track-previous';
+            buttonTrackPrevious.textContent = 'Previous track';
+            var buttonTrackNext = d.createElement('button');
+            buttonTrackNext.className = 'audile-button-track-next';
+            buttonTrackNext.textContent = 'Next track';
+            var currentTitle = d.createElement('span');
+            currentTitle.className = 'audile-current-title';
+            currentTitle.innerText = 'Loading…';
+            var buttonSkipBack = d.createElement('button');
+            buttonSkipBack.className = 'audile-button-skip-back';
+            buttonSkipBack.textContent = 'Fast forward 15 seconds';
+            var buttonSkipForward = d.createElement('button');
+            buttonSkipForward.className = 'audile-button-skip-forward';
+            buttonSkipForward.textContent = 'Rewind 15 seconds';
+            var buttonPlayPause = d.createElement('button');
+            buttonPlayPause.className = 'audile-button-play-pause';
+            var progressBar = d.createElement('progress');
+            progressBar.className = 'audile-progress-bar';
+            progressBar.min = '0';
+            progressBar.max = '100';
+            // progressBar.value = '0';
+            var scrubberBar = d.createElement('input');
+            scrubberBar.className = 'audile-scrubber-bar';
+            scrubberBar.type = 'range';
+            scrubberBar.min = '0';
+            scrubberBar.max = '100';
+            // scrubberBar.value = '0';
+            var currentTime = d.createElement('span');
+            currentTime.className = 'audile-current-time';
+            currentTime.textContent = '0:00';
+            var duration = d.createElement('span');
+            duration.className = 'audile-duration';
+            duration.textContent = '--:--';
+
+            topRow.appendChild(currentTitle);
+            topRow.appendChild(progressBar);
+            topRow.appendChild(scrubberBar);
+            topRow.appendChild(currentTime);
+            topRow.appendChild(duration);
+            // topRow.appendChild(timeDisplay);
+            if (tracks.length > 1) {
+                controls.appendChild(buttonTrackPrevious);
             }
-            // Ensure all non-current tracks are stopped
-            tracks.forEach(function(track, index) {
-                if (index === currentIndex) return;
-                track.pause();
+            controls.appendChild(buttonSkipBack);
+            controls.appendChild(buttonPlayPause);
+            controls.appendChild(buttonSkipForward);
+            if (tracks.length > 1) {
+                controls.appendChild(buttonTrackNext);
+            }
+
+            wrapper.appendChild(topRow);
+            wrapper.appendChild(controls);
+
+            var styleElement = d.createElement('style');
+            styleElement.innerHTML = STYLES;
+            d.head.appendChild(styleElement);
+
+            var isPlaying = false;
+            var currentIndex = 0;
+            var initialIndex = 0;
+            var trackStateBySrc = {};
+            if (savedTrackSrc) {
+                for (var index = 0; index < tracks.length; index++) {
+                    if (tracks[index].src !== savedTrackSrc) continue;
+                    initialIndex = index;
+                    break;
+                }
+            }
+
+            if (!tracks[initialIndex]) return;
+
+            function initializePlayer() {
+                wrapper.classList.remove('loading');
+                updateTrackIndex(initialIndex);
+                if (savedProgress) {
+                    updateTrackProgress(tracks[initialIndex], savedProgress);
+                }
+                tracks[initialIndex].removeEventListener('canplay', initializePlayer);
+            }
+
+            tracks[initialIndex].addEventListener('canplay', initializePlayer);
+            tracks[initialIndex].load();
+
+            function updateTrackProgress(track, time) {
+                if (Math.floor(track.currentTime) !== Math.floor(time)) {
+                    track.currentTime = time;
+                }
+                // Only update UI controls if this is the current track and we know its duration
+                if (tracks[currentIndex] !== track || Number.isNaN(track.duration)) return;
+
+                var progressValue = parseFloat(((time / track.duration) * 100).toFixed(6));
+                progressBar.value = progressValue;
+                scrubberBar.value = progressValue;
+                currentTime.textContent = formatTimestamp(time);
+                duration.textContent = '–' + formatTimestamp(track.duration - track.currentTime);
+            }
+
+            function updateTrackIndex(nextIndex) {
+                if (!tracks.length) return;
+                // Keep it wihin the bounds of the available audio tracks
+                nextIndex = Math.max(Math.min(nextIndex, tracks.length - 1), 0);
+
+                tracks.forEach(function(track, index) {
+                    track.pause();
+                    updateTrackProgress(track, 0);
+                });
+
+                currentIndex = nextIndex;
+                buttonTrackPrevious.disabled = currentIndex === 0;
+                buttonTrackNext.disabled = currentIndex === tracks.length - 1;
+
+                var nextTrack = tracks[currentIndex];
+                currentTitle.innerText = nextTrack.title || nextTrack.src;
+                duration.textContent = Number.isNaN(nextTrack.duration)
+                    ? '--:--'
+                    : '–' + formatTimestamp(nextTrack.duration);
+                if (isPlaying) {
+                    nextTrack.play();
+                }
+            }
+
+            buttonPlayPause.addEventListener('click', function() {
+                if (!tracks.length) return;
+
+                if (!tracks[currentIndex]) {
+                    currentIndex = tracks.length - 1;
+                }
+                // Ensure all non-current tracks are stopped
+                tracks.forEach(function(track, index) {
+                    if (index === currentIndex) return;
+                    track.pause();
+                });
+
+                if (isPlaying) {
+                    wrapper.classList.remove('playing');
+                    tracks[currentIndex].pause();
+                } else {
+                    wrapper.classList.add('playing');
+                    tracks[currentIndex].play();
+                }
+
+                isPlaying = !isPlaying;
             });
 
-            if (isPlaying) {
-                wrapper.classList.remove('playing');
-                tracks[currentIndex].pause();
-            } else {
-                wrapper.classList.add('playing');
-                tracks[currentIndex].play();
-            }
-
-            isPlaying = !isPlaying;
-        });
-
-        buttonTrackPrevious.addEventListener('click', function() {
-            var track = tracks[currentIndex];
-            if (track && track.currentTime >= 3) {
-                updateTrackProgress(track, 0);
-                return;
-            }
-
-            updateTrackIndex(currentIndex - 1);
-        });
-
-        buttonTrackNext.addEventListener('click', function() {
-            updateTrackIndex(currentIndex + 1);
-        });
-
-        buttonSkipBack.addEventListener('click', function() {
-            var track = tracks[currentIndex];
-            if (!track) return;
-
-            if (track.currentTime < 2) {
-                // If no previous track, reset time to 0
-                if (currentIndex === 0) {
+            buttonTrackPrevious.addEventListener('click', function() {
+                var track = tracks[currentIndex];
+                if (track && track.currentTime >= 3) {
                     updateTrackProgress(track, 0);
                     return;
                 }
-                var previousIndex = currentIndex - 1;
-                var previousTrack = tracks[previousIndex];
-                updateTrackIndex(previousIndex);
-                updateTrackProgress(previousTrack, Math.max(0, previousTrack.duration - 15));
-                return;
-            }
 
-            if (track.currentTime <= 15) {
-                updateTrackProgress(track, 0);
-                track.currentTime = 0;
-                return;
-            }
-            updateTrackProgress(track, track.currentTime - 15);
-        });
+                updateTrackIndex(currentIndex - 1);
+            });
 
-        buttonSkipForward.addEventListener('click', function() {
-            var track = tracks[currentIndex];
-            if (!track) return;
+            buttonTrackNext.addEventListener('click', function() {
+                updateTrackIndex(currentIndex + 1);
+            });
 
-            var trackDuration = track.duration;
-            var timeFromEnd = trackDuration - track.currentTime;
-            // If almost at end and there’s no next track, reset time to end of track
-            if (timeFromEnd <= 15) {
-                if (currentIndex >= tracks.length - 1) {
-                    track.currentTime = trackDuration;
+            buttonSkipBack.addEventListener('click', function() {
+                var track = tracks[currentIndex];
+                if (!track) return;
+
+                if (track.currentTime < 2) {
+                    // If no previous track, reset time to 0
+                    if (currentIndex === 0) {
+                        updateTrackProgress(track, 0);
+                        return;
+                    }
+                    var previousIndex = currentIndex - 1;
+                    var previousTrack = tracks[previousIndex];
+                    updateTrackIndex(previousIndex);
+                    updateTrackProgress(previousTrack, Math.max(0, previousTrack.duration - 15));
                     return;
                 }
-                // If within 15 seconds of the end, jump to next track
-                var nextIndex = currentIndex + 1;
-                var nextTrack = tracks[nextIndex];
-                updateTrackIndex(nextIndex);
-                // If more than 7 seconds from the end, start the next track at the beginning
-                if (timeFromEnd >= 7) return;
-                // Else start the next track 15 seconds from current time
-                nextTrack.currentTime = Math.min(nextTrack.duration, 15 - timeFromEnd);
-                return;
-            }
 
-            track.currentTime += 15;
-        });
-
-        scrubberBar.addEventListener('input', function() {
-            var track = tracks[currentIndex];
-            if (!track) return;
-
-            var nextTime = (scrubberBar.value / 100) * track.duration;
-            updateTrackProgress(track, nextTime);
-        });
-
-        tracks.forEach(function(track, index) {
-            // Listen for canplaythrough event for each to determine when to show loader and when to play
-            track.addEventListener('canplaythrough', function(event) {
-                if (!trackStateBySrc[track.src]) {
-                    trackStateBySrc[track.src] = { loaded: true };
-                } else {
-                    trackStateBySrc[track.src].loaded = true;
+                if (track.currentTime <= 15) {
+                    updateTrackProgress(track, 0);
+                    track.currentTime = 0;
+                    return;
                 }
+                updateTrackProgress(track, track.currentTime - 15);
             });
 
-            track.addEventListener('ended', function() {
-                var nextTrack = tracks[index + 1] || tracks[0];
-                updateTrackIndex(nextTrack);
+            buttonSkipForward.addEventListener('click', function() {
+                var track = tracks[currentIndex];
+                if (!track) return;
+
+                var trackDuration = track.duration;
+                var timeFromEnd = trackDuration - track.currentTime;
+                // If almost at end and there’s no next track, reset time to end of track
+                if (timeFromEnd <= 15) {
+                    if (currentIndex >= tracks.length - 1) {
+                        track.currentTime = trackDuration;
+                        return;
+                    }
+                    // If within 15 seconds of the end, jump to next track
+                    var nextIndex = currentIndex + 1;
+                    var nextTrack = tracks[nextIndex];
+                    updateTrackIndex(nextIndex);
+                    // If more than 7 seconds from the end, start the next track at the beginning
+                    if (timeFromEnd >= 7) return;
+                    // Else start the next track 15 seconds from current time
+                    nextTrack.currentTime = Math.min(nextTrack.duration, 15 - timeFromEnd);
+                    return;
+                }
+
+                track.currentTime += 15;
             });
 
-            track.addEventListener('play', function() {
-                localStorage.setItem(KEY_TRACK_SRC, track.src);
+            scrubberBar.addEventListener('input', function() {
+                var track = tracks[currentIndex];
+                if (!track) return;
+
+                var nextTime = (scrubberBar.value / 100) * track.duration;
+                updateTrackProgress(track, nextTime);
             });
 
-            track.addEventListener('timeupdate', function() {
-                updateTrackProgress(track, track.currentTime);
-                localStorage.setItem(KEY_TRACK_PROGRESS, track.currentTime);
+            tracks.forEach(function(track, index) {
+                // Listen for canplaythrough event for each to determine when to show loader and when to play
+                track.addEventListener('canplaythrough', function(event) {
+                    if (!trackStateBySrc[track.src]) {
+                        trackStateBySrc[track.src] = { loaded: true };
+                    } else {
+                        trackStateBySrc[track.src].loaded = true;
+                    }
+                });
+
+                track.addEventListener('ended', function() {
+                    var nextTrack = tracks[index + 1] || tracks[0];
+                    updateTrackIndex(nextTrack);
+                });
+
+                track.addEventListener('play', function() {
+                    localStorage.setItem(KEY_TRACK_SRC, track.src);
+                });
+
+                track.addEventListener('timeupdate', function() {
+                    updateTrackProgress(track, track.currentTime);
+                    localStorage.setItem(KEY_TRACK_PROGRESS, track.currentTime);
+                });
             });
         });
-    });
-});
+    }
+
+    if (d.readyState === 'loading') {
+        d.addEventListener('DOMContentLoaded', attachPlayers);
+    } else {
+        attachPlayers();
+    }
+})(document);
