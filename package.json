@@ -1,6 +1,6 @@
 {
   "name": "audile",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Mobile-friendly audio player for use with long-form audio",
   "main": "index.js",
   "scripts": {
