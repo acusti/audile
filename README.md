@@ -1,17 +1,20 @@
 audile
 ======
 
-A mobile-friendly audio player for use with long-form audio. [See it in action.](https://www.chrispattonmusic.com/nissas-flute/)
+[![latest version](https://img.shields.io/npm/v/audile?style=for-the-badge)](https://www.npmjs.com/package/audile)
+[![bundle size](https://img.shields.io/bundlephobia/minzip/audile?style=for-the-badge)](https://bundlephobia.com/package/audile)
+
+_A mobile-friendly audio player for use with long-form audio. [See it in action.](https://www.chrispattonmusic.com/nissas-flute/)_
 
 Features
 --------
 
 * Supports both a single audio track or multiple tracks in order (e.g. a playlist)
 * Saves last-played track and playhead location and restores them when returning to that page
-* Features a simple mobile-first design with touch-friendly controls ([see example](https://www.chrispattonmusic.com/nissas-flute/ ))
+* Features a simple mobile-first design with touch-friendly controls ([see example](https://www.chrispattonmusic.com/nissas-flute/))
 * Includes controls for previous and next track and for skipping backwards or forwards 15 seconds
 * Shows the title of the current playing track in the player
-* Weighs in at less than 20KB uncompressed with no dependencies
+* Weighs in at around 10KB (minified) with no dependencies
 
 Usage
 -----
