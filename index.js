@@ -230,7 +230,7 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
                 }
             }
 
-            buttonPlayPause.addEventListener('click', function() {
+            function togglePlayPause() {
                 if (!tracks.length) return;
 
                 if (!tracks[currentIndex]) {
@@ -251,7 +251,9 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
                 }
 
                 isPlaying = !isPlaying;
-            });
+            }
+
+            buttonPlayPause.addEventListener('click', togglePlayPause);
 
             buttonTrackPrevious.addEventListener('click', function() {
                 var track = tracks[currentIndex];
@@ -337,7 +339,12 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
                 });
 
                 track.addEventListener('ended', function() {
-                    updateTrackIndex(tracks[index + 1] ? index + 1 : 0);
+                    var nextIndex = index + 1;
+                    if (!tracks[nextIndex]) {
+                        nextIndex = 0;
+                        if (isPlaying) togglePlayPause();
+                    }
+                    updateTrackIndex(nextIndex);
                 });
 
                 track.addEventListener('timeupdate', function() {
