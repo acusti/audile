@@ -4,7 +4,7 @@ audile
 [![latest version](https://img.shields.io/npm/v/audile?style=for-the-badge)](https://www.npmjs.com/package/audile)
 [![bundle size](https://img.shields.io/bundlephobia/minzip/audile?style=for-the-badge)](https://bundlephobia.com/package/audile)
 
-_A mobile-friendly audio player for use with long-form audio. [See it in action.](https://www.chrispattonmusic.com/nissas-flute/)_
+_A mobile-friendly audio player optimized for use with longer-form audio. [See it in action.](https://www.chrispattonmusic.com/nissas-flute/)_
 
 Features
 --------
