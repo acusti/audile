@@ -29,7 +29,7 @@ Add the audio files you want to be playable by the player inside a `.audile` con
 ```html
 <div class="audile">
     <h2>The Ricky Gervais Show: The Complete First Season</h2>
-    <audio preload src="https://archive.org/download/Ricky_Gervais-Podcasts/01%20Episode%20One.mp3" title="Episode One"></audio>
+    <audio preload="auto" src="https://archive.org/download/Ricky_Gervais-Podcasts/01%20Episode%20One.mp3" title="Episode One"></audio>
     <audio src="https://archive.org/download/Ricky_Gervais-Podcasts/02%20Episode%20Two.mp3" title="Episode Two"></audio>
     <audio src="https://archive.org/download/Ricky_Gervais-Podcasts/01%20Episode%20Three.mp3" title="Episode Three"></audio>
     <audio src="https://archive.org/download/Ricky_Gervais-Podcasts/02%20Episode%20Four.mp3" title="Episode Four"></audio>
