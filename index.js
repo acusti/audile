@@ -41,7 +41,6 @@
 .audile-current-title,.audile-progress-bar{width:100%}
 .audile.loading .audile-current-title{color:#bbb;font-style:italic}
 .audile-progress-bar,.audile-scrubber-bar[type=range]{-webkit-appearance:none;position:absolute;left:0;bottom:20px;top:auto;width:100%;height:10px;margin:0;background-color:transparent;opacity:1}
-.audile-scrubber-bar[type=range]{left:-2px}
 .audile-progress-bar{overflow:hidden}
 .audile-progress-bar:focus{outline:none}
 .loading .audile-progress-bar::before{content:"";position:absolute;width:200px;height:10px;top:0;left:0;background-size:200px 10px;background-image:linear-gradient(to right,transparent,#407bbb,transparent);transform:translateX(-100%);animation:audile-loading-progress 2.1s linear infinite}
