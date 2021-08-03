@@ -215,10 +215,16 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
                 buttonTrackNext.disabled = currentIndex === tracks.length - 1;
 
                 var nextTrack = tracks[currentIndex];
+                if (!nextTrack) return;
+
+                localStorage.setItem(KEY_TRACK_SRC, nextTrack.src);
+                localStorage.setItem(KEY_TRACK_PROGRESS, 0);
+
                 currentTitle.innerText = nextTrack.title || nextTrack.src;
                 duration.textContent = Number.isNaN(nextTrack.duration)
                     ? '--:--'
                     : '–' + formatTimestamp(nextTrack.duration);
+
                 if (isPlaying) {
                     nextTrack.play();
                 }
@@ -332,10 +338,6 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
 
                 track.addEventListener('ended', function() {
                     updateTrackIndex(tracks[index + 1] ? index + 1 : 0);
-                });
-
-                track.addEventListener('play', function() {
-                    localStorage.setItem(KEY_TRACK_SRC, track.src);
                 });
 
                 track.addEventListener('timeupdate', function() {
