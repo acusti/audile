@@ -1,25 +1,25 @@
 {
-  "name": "audile",
-  "version": "1.0.1",
-  "description": "Mobile-friendly audio player for use with long-form audio",
-  "main": "index.js",
-  "scripts": {
-    "test": "test"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/acusti/audile.git"
-  },
-  "keywords": [
-    "audio",
-    "player",
-    "podcasts",
-    "audiobooks"
-  ],
-  "author": "andrew patton",
-  "license": "UNLICENSED",
-  "bugs": {
-    "url": "https://github.com/acusti/audile/issues"
-  },
-  "homepage": "https://github.com/acusti/audile#readme"
+    "name": "audile",
+    "version": "1.0.1",
+    "description": "Mobile-friendly audio player for use with long-form audio",
+    "main": "index.js",
+    "scripts": {
+        "test": "test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/acusti/audile.git"
+    },
+    "keywords": [
+        "audio",
+        "player",
+        "podcasts",
+        "audiobooks"
+    ],
+    "author": "andrew patton",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/acusti/audile/issues"
+    },
+    "homepage": "https://github.com/acusti/audile#readme"
 }
