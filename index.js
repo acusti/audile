@@ -332,8 +332,7 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
                 });
 
                 track.addEventListener('ended', function() {
-                    var nextTrack = tracks[index + 1] || tracks[0];
-                    updateTrackIndex(nextTrack);
+                    updateTrackIndex(tracks[index + 1] ? index + 1 : 0);
                 });
 
                 track.addEventListener('play', function() {
