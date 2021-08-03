@@ -129,7 +129,7 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
             scrubberBar.className = 'audile-scrubber-bar';
             scrubberBar.type = 'range';
             scrubberBar.min = '0';
-            scrubberBar.max = '100';
+            scrubberBar.max = '1000';
             // scrubberBar.value = '0';
             var currentTime = d.createElement('span');
             currentTime.className = 'audile-current-time';
@@ -196,7 +196,7 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
 
                 var progressValue = parseFloat(((time / track.duration) * 100).toFixed(6));
                 progressBar.value = progressValue;
-                scrubberBar.value = progressValue;
+                scrubberBar.value = progressValue * 10;
                 currentTime.textContent = formatTimestamp(time);
                 duration.textContent = '–' + formatTimestamp(track.duration - track.currentTime);
             }
@@ -317,7 +317,7 @@ progress.audile-progress-bar::-webkit-progress-value{background:#407bbb;border-r
                 var track = tracks[currentIndex];
                 if (!track) return;
 
-                var nextTime = (scrubberBar.value / 100) * track.duration;
+                var nextTime = (scrubberBar.value / 1000) * track.duration;
                 updateTrackProgress(track, nextTime);
             });
 
